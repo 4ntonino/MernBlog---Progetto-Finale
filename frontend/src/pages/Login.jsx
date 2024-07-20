@@ -1,105 +1,103 @@
-import { useState,useEffect } from "react"; // Importa il hook useState da React per gestire lo stato
-import { useNavigate , useLocation } from "react-router-dom"; // Importa useNavigate da react-router-dom per navigare programmaticamente
-import { loginUser } from "../services/api"; // Importa la funzione API per effettuare il login
+import React, { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { loginUser } from "../services/api";
+import { Container, Form, Button, Card, Alert } from 'react-bootstrap';
+import { Google, Github } from 'react-bootstrap-icons';
 
 export default function Login() {
   const [formData, setFormData] = useState({
-    email: "", // Stato iniziale del campo email
-    password: "", // Stato iniziale del campo password
+    email: "",
+    password: "",
   });
-  const navigate = useNavigate(); // Inizializza il navigatore per cambiare pagina
-  const location = useLocation(); // Per accedere ai parametri dell'URL corrente
-
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
-    // Questo effect viene eseguito dopo il rendering del componente
-    // e ogni volta che location o navigate cambiano
-
-    // Estraiamo i parametri dall'URL
     const params = new URLSearchParams(location.search);
-    // Cerchiamo un parametro 'token' nell'URL
     const token = params.get("token");
-    /* console.log('Received token:', token); */
-
     if (token) {
-      // Se troviamo un token, lo salviamo nel localStorage
       localStorage.setItem("token", token);
-  /*     console.log('Token saved, navigating to home'); */
-      // Dispatchamo un evento 'storage' per aggiornare altri componenti che potrebbero dipendere dal token
       window.dispatchEvent(new Event("storage"));
-      /* window.dispatchEvent(new Event("loginStateChange")); */       //  < -    NON A LEZIONE
-      // Navighiamo alla home page
       navigate("/");
     }
-  }, [location, navigate]); // Questo effect dipende da location e navigate
+  }, [location, navigate]);
 
-
-
-
-  // Gestore del cambiamento degli input del form
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value }); // Aggiorna lo stato del form con i valori degli input
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // Gestore dell'invio del form
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Previene il comportamento predefinito del form di ricaricare la pagina
+    e.preventDefault();
+    setError("");
     try {
-      const response = await loginUser(formData); // Chiama la funzione loginUser per autenticare l'utente
-      localStorage.setItem("token", response.token); // Memorizza il token di autenticazione nel localStorage
-      // Trigger l'evento storage per aggiornare la Navbar
-      window.dispatchEvent(new Event("storage")); // Scatena un evento di storage per aggiornare componenti come la Navbar
-      alert("Login effettuato con successo!"); // Mostra un messaggio di successo
-      navigate("/"); // Naviga alla pagina principale
+      const response = await loginUser(formData);
+      localStorage.setItem("token", response.token);
+      window.dispatchEvent(new Event("storage"));
+      navigate("/");
     } catch (error) {
-      console.error("Errore durante il login:", error); // Logga l'errore in console
-      alert("Credenziali non valide. Riprova."); // Mostra un messaggio di errore
+      console.error("Errore durante il login:", error);
+      setError("Credenziali non valide. Riprova.");
     }
   };
 
-   // Funzione aggiornata per gestire il login con Google
- const handleGoogleLogin = () => {
+  const handleGoogleLogin = () => {
+    window.location.href = "http://localhost:5001/api/auth/google";
+  };
 
-     window.location.href = "http://localhost:5001/api/auth/google"; //    < - - - - A LEZIONE
-
-/*   window.location.href = `${API_URL}/api/auth/google`; */   // < - - -  NELLA REPO
-};
-
-  // Funzione aggiornata per gestire il login con GitHub
   const handleGitHubLogin = () => {
     window.location.href = `${API_URL}/api/auth/github`;
   };
 
-
-
-
-
   return (
-    <div className="container">
-      <h2>Login</h2>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          onChange={handleChange}
-          required
-        />
-        <button type="submit">Accedi</button>
-      </form>
+    <Container className="d-flex align-items-center justify-content-center" style={{ minHeight: "100vh" }}>
+      <Card style={{ width: '400px' }} className="shadow">
+        <Card.Body>
+          <h2 className="text-center mb-4">Login</h2>
+          <h4 className="text-center mb-4 text-primary">Benvenuto su StriveBlog!</h4>
+          {error && <Alert variant="danger">{error}</Alert>}
+          <Form onSubmit={handleSubmit}>
+            <Form.Group className="mb-3" controlId="formBasicEmail">
+              <Form.Label>Email address</Form.Label>
+              <Form.Control
+                type="email"
+                name="email"
+                placeholder="Enter email"
+                onChange={handleChange}
+                required
+              />
+            </Form.Group>
 
+            <Form.Group className="mb-3" controlId="formBasicPassword">
+              <Form.Label>Password</Form.Label>
+              <Form.Control
+                type="password"
+                name="password"
+                placeholder="Password"
+                onChange={handleChange}
+                required
+              />
+            </Form.Group>
 
-      <button onClick={handleGoogleLogin}>Accedi con Google</button>
-  
+            <div className="d-grid gap-2">
+              <Button variant="primary" type="submit">
+                Login
+              </Button>
+            </div>
+          </Form>
 
+          <hr className="my-4" />
 
-    </div>
+          <div className="d-grid gap-2">
+            <Button variant="outline-danger" onClick={handleGoogleLogin}>
+              <Google className="me-2" /> Login with Google
+            </Button>
+            <Button variant="outline-dark" onClick={handleGitHubLogin}>
+              <Github className="me-2" /> Login with GitHub
+            </Button>
+          </div>
+        </Card.Body>
+      </Card>
+    </Container>
   );
 }

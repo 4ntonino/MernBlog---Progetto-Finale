@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { loginUser } from "../services/api";
 import { Container, Form, Button, Card, Alert } from 'react-bootstrap';
-import { Google, Github } from 'react-bootstrap-icons';
+import { Google } from 'react-bootstrap-icons';
 
 export default function Login() {
   const [formData, setFormData] = useState({
@@ -92,9 +92,9 @@ export default function Login() {
             <Button variant="outline-danger" onClick={handleGoogleLogin}>
               <Google className="me-2" /> Login with Google
             </Button>
-            <Button variant="outline-dark" onClick={handleGitHubLogin}>
+          {/*   <Button variant="outline-dark" onClick={handleGitHubLogin}>
               <Github className="me-2" /> Login with GitHub
-            </Button>
+            </Button> */}
           </div>
         </Card.Body>
       </Card>

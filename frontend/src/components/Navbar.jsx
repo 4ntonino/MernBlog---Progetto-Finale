@@ -80,9 +80,11 @@ export default function Navbar() {
   import { Link, useNavigate } from 'react-router-dom';
   import { Navbar, Nav, Container, Button } from 'react-bootstrap';
   import 'bootstrap/dist/css/bootstrap.min.css';
+  import logo from "../../assets/logo.png";
+  import "./styles.css";
   
   const glassStyle = {
-    background: 'rgba(255, 255, 255, 0.1)',
+    background: 'rgba(0,0,255, 0.1)',
     backdropFilter: 'blur(10px)',
     border: '1px solid rgba(255, 255, 255, 0.18)',
     boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
@@ -115,7 +117,9 @@ export default function Navbar() {
     return (
       <Navbar expand="lg" sticky="top" className="py-1" style={glassStyle}>
         <Container>
-          <Navbar.Brand as={Link} to="/" className="text-dark">Blog App</Navbar.Brand>
+        <Navbar.Brand as={Link} to="/">
+          <img className="blog-navbar-brand" alt="logo" src={logo} />
+        </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ms-auto">
@@ -123,7 +127,7 @@ export default function Navbar() {
               {isLoggedIn ? (
                 <>
                   <Nav.Link as={Link} to="/create" className="text-dark">Nuovo Post</Nav.Link>
-                  <Button variant="outline-light" size="sm" onClick={handleLogout} className="ms-2">Logout</Button>
+                  <Button variant="outline-dark" size="sm" onClick={handleLogout} className="ms-2">Logout</Button>
                 </>
               ) : (
                 <>

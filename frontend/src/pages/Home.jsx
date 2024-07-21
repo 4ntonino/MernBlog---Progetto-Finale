@@ -93,7 +93,8 @@ export default function Home() {
         </Row>
         {visiblePosts < posts.length && (
           <div className="text-center mt-4">
-            <Button variant="light" onClick={loadMore}>Carica altri</Button>
+            {/* <Button variant="light" onClick={loadMore}>Carica altri</Button> */}
+            <button type="button" class="btn btn-outline-light" onClick={loadMore}>Carica altri</button>
           </div>
         )}
       </Container>

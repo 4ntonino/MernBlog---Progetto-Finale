@@ -1,9 +1,10 @@
-import { useState } from "react"; // Importa il hook useState da React per gestire lo stato del componente
-import { useNavigate } from "react-router-dom"; // Importa useNavigate da react-router-dom per navigare tra le pagine
-import { registerUser } from "../services/api"; // Importa la funzione registerUser dal file api.js per effettuare la registrazione
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { registerUser } from "../services/api";
+import { Container, Row, Col, Form, Button, Card, Alert } from 'react-bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default function Register() {
-  // Definisce lo stato del form con useState, inizializzato con campi vuoti
   const [formData, setFormData] = useState({
     nome: "",
     cognome: "",
@@ -12,67 +13,98 @@ export default function Register() {
     dataDiNascita: "",
   });
 
-  const navigate = useNavigate(); // Inizializza useNavigate per poter navigare programmaticamente
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertVariant, setAlertVariant] = useState('success');
+  const [alertMessage, setAlertMessage] = useState('');
 
-  // Gestore per aggiornare lo stato quando i campi del form cambiano
+  const navigate = useNavigate();
+
   const handleChange = (e) => {
-    // Aggiorna il campo corrispondente nello stato con il valore attuale dell'input
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // Gestore per la sottomissione del form
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Previene il comportamento predefinito del form di ricaricare la pagina
+    e.preventDefault();
     try {
-      await registerUser(formData); // Chiama la funzione registerUser con i dati del form
-      alert("Registrazione avvenuta con successo!"); // Mostra un messaggio di successo
-      navigate("/login"); // Naviga alla pagina di login dopo la registrazione
+      await registerUser(formData);
+      setAlertVariant('success');
+      setAlertMessage('Registrazione avvenuta con successo!');
+      setShowAlert(true);
+      setTimeout(() => navigate("/login"), 2000);
     } catch (error) {
-      console.error("Errore durante la registrazione:", error); // Logga l'errore in console
-      alert("Errore durante la registrazione. Riprova."); // Mostra un messaggio di errore
+      console.error("Errore durante la registrazione:", error);
+      setAlertVariant('danger');
+      setAlertMessage('Errore durante la registrazione. Riprova.');
+      setShowAlert(true);
     }
   };
 
   return (
-    <div className="container">
-      <h2>Registrazione</h2>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          name="nome"
-          placeholder="Nome"
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="text"
-          name="cognome"
-          placeholder="Cognome"
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="date"
-          name="dataDiNascita"
-          onChange={handleChange}
-          required
-        />
-        <button type="submit">Registrati</button>
-      </form>
-    </div>
+    <Container className="mt-5">
+      <Row className="justify-content-md-center">
+        <Col md={6}>
+          <Card>
+            <Card.Body>
+              <h2 className="text-center mb-4 text-black">Registrazione</h2>
+              {showAlert && (
+                <Alert variant={alertVariant} onClose={() => setShowAlert(false)} dismissible>
+                  {alertMessage}
+                </Alert>
+              )}
+              <Form onSubmit={handleSubmit}>
+                <Form.Group className="mb-3">
+                  <Form.Label className="text-black">Nome</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="nome"
+                    onChange={handleChange}
+                    required
+                  />
+                </Form.Group>
+                <Form.Group className="mb-3">
+                  <Form.Label className="text-black">Cognome</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="cognome"
+                    onChange={handleChange}
+                    required
+                  />
+                </Form.Group>
+                <Form.Group className="mb-3">
+                  <Form.Label className="text-black">Email</Form.Label>
+                  <Form.Control
+                    type="email"
+                    name="email"
+                    onChange={handleChange}
+                    required
+                  />
+                </Form.Group>
+                <Form.Group className="mb-3">
+                  <Form.Label className="text-black">Password</Form.Label>
+                  <Form.Control
+                    type="password"
+                    name="password"
+                    onChange={handleChange}
+                    required
+                  />
+                </Form.Group>
+                <Form.Group className="mb-3">
+                  <Form.Label className="text-black">Data di Nascita</Form.Label>
+                  <Form.Control
+                    type="date"
+                    name="dataDiNascita"
+                    onChange={handleChange}
+                    required
+                  />
+                </Form.Group>
+                <Button variant="primary" type="submit" className="w-100">
+                  Registrati
+                </Button>
+              </Form>
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
+    </Container>
   );
 }

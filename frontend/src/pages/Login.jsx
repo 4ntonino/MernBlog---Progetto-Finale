@@ -13,6 +13,8 @@ export default function Login() {
   const navigate = useNavigate();
   const location = useLocation();
 
+// ESEGUITO DOPO IL RENDER DEL COMPONENTE
+
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const token = params.get("token");
@@ -41,13 +43,14 @@ export default function Login() {
     }
   };
 
+
+  // REINDERIZZO L'UTENTE ALL'ENDPOINT DEFINITO NEL BE
+
   const handleGoogleLogin = () => {
     window.location.href = "http://localhost:5001/api/auth/google";
   };
 
-  const handleGitHubLogin = () => {
-    window.location.href = `${API_URL}/api/auth/github`;
-  };
+
 
   return (
     <Container className="d-flex align-items-center justify-content-center" style={{ minHeight: "100vh" }}>
@@ -92,9 +95,7 @@ export default function Login() {
             <Button variant="outline-danger" onClick={handleGoogleLogin}>
               <Google className="me-2" /> Login with Google
             </Button>
-          {/*   <Button variant="outline-dark" onClick={handleGitHubLogin}>
-              <Github className="me-2" /> Login with GitHub
-            </Button> */}
+      
           </div>
         </Card.Body>
       </Card>

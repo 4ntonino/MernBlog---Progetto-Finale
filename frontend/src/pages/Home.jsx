@@ -6,10 +6,13 @@ import { getPosts } from "../services/api";
 import "./Home.css";
 
 export default function Home() {
+  // Stati per gestire i post, il caricamento, gli errori e il numero di post visibili
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [visiblePosts, setVisiblePosts] = useState(6);
+
+  //  uso useEffect per recuperare i post all'avvio del componente
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -27,9 +30,13 @@ export default function Home() {
     fetchPosts();
   }, []);
 
+  // Funzione per caricare più post
+
   const loadMore = () => {
     setVisiblePosts((prevVisible) => prevVisible + 6);
   };
+
+  // Rendering condizionale per lo stato di caricamento
 
   if (loading) {
     return (
@@ -40,6 +47,8 @@ export default function Home() {
       </div>
     );
   }
+
+  // Rendering condizionale per lo stato di errore
 
   if (error) {
     return (
@@ -53,9 +62,12 @@ export default function Home() {
     );
   }
 
+  // Rendering principale del componente
+  
   return (
     <div className="animated-background">
       <Container fluid className="py-5 px-4">
+        {/* Titolo animato */}
         <motion.h1 
           className="text-center mb-5 text-white"
           initial={{ opacity: 0, y: -50 }}
@@ -64,10 +76,12 @@ export default function Home() {
         >
          
         </motion.h1>
+        {/* Griglia di post */}
         <Row xs={1} sm={2} md={3} lg={4} className="g-4">
           <AnimatePresence>
             {posts.slice(0, visiblePosts).map((post, index) => (
               <Col key={post._id}>
+                {/* Animazione per ogni card di post */}
                 <motion.div
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
@@ -91,10 +105,10 @@ export default function Home() {
             ))}
           </AnimatePresence>
         </Row>
+        {/* Pulsante "Carica altri" */}
         {visiblePosts < posts.length && (
           <div className="text-center mt-4">
-            {/* <Button variant="light" onClick={loadMore}>Carica altri</Button> */}
-            <button type="button" class="btn btn-outline-light" onClick={loadMore}>Carica altri</button>
+            <button type="button" className="btn btn-outline-light" onClick={loadMore}>Carica altri</button>
           </div>
         )}
       </Container>

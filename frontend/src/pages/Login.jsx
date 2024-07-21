@@ -5,35 +5,57 @@ import { Container, Form, Button, Card, Alert } from 'react-bootstrap';
 import { Google } from 'react-bootstrap-icons';
 
 export default function Login() {
+
+  // Stato per gestire i dati del form
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
+
+  // Stato per gestire eventuali errori
+
   const [error, setError] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
 
-// ESEGUITO DOPO IL RENDER DEL COMPONENTE
+  // uso useEffect dopo il render del componente
 
   useEffect(() => {
+
+    // Controllo se c'è un token nell'URL (per il login con Google)
+
     const params = new URLSearchParams(location.search);
     const token = params.get("token");
     if (token) {
+
+      // Se c'è un token, lo salva nel localStorage e naviga alla home
+
       localStorage.setItem("token", token);
       window.dispatchEvent(new Event("storage"));
       navigate("/");
     }
   }, [location, navigate]);
 
+  // Gestisco i cambiamenti nei campi del form
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+
+  // Gestisco l'invio del form di login
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     try {
+
+      // Tento il login
+
       const response = await loginUser(formData);
+
+      // Se il login ha successo, salva il token e naviga alla home
+
       localStorage.setItem("token", response.token);
       window.dispatchEvent(new Event("storage"));
       navigate("/");
@@ -43,14 +65,11 @@ export default function Login() {
     }
   };
 
-
-  // REINDERIZZO L'UTENTE ALL'ENDPOINT DEFINITO NEL BE
-
+  // Reindirizza l'utente all'endpoint definito nel backend per il login con Google
+  
   const handleGoogleLogin = () => {
     window.location.href = "http://localhost:5001/api/auth/google";
   };
-
-
 
   return (
     <Container className="d-flex align-items-center justify-content-center" style={{ minHeight: "100vh" }}>
@@ -95,7 +114,6 @@ export default function Login() {
             <Button variant="outline-danger" onClick={handleGoogleLogin}>
               <Google className="me-2" /> Login with Google
             </Button>
-      
           </div>
         </Card.Body>
       </Card>

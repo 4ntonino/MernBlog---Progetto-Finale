@@ -5,6 +5,7 @@ import { Container, Row, Col, Form, Button, Card, Alert, ProgressBar } from 'rea
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default function CreatePost() {
+  // Stato per gestire i dati del post
   const [post, setPost] = useState({
     title: "",
     category: "",
@@ -13,11 +14,13 @@ export default function CreatePost() {
     author: "",
   });
 
+  // Stati per gestire il file di copertina, il caricamento e gli alert
   const [coverFile, setCoverFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [alert, setAlert] = useState({ show: false, variant: '', message: '' });
   const navigate = useNavigate();
 
+  // uso useEffect per recuperare l'email dell'utente all'avvio del componente
   useEffect(() => {
     const fetchUserEmail = async () => {
       try {
@@ -31,6 +34,7 @@ export default function CreatePost() {
     fetchUserEmail();
   }, [navigate]);
 
+  // Gestiso i cambiamenti nei campi del form
   const handleChange = (e) => {
     const { name, value } = e.target;
     if (name === "readTimeValue") {
@@ -43,14 +47,21 @@ export default function CreatePost() {
     }
   };
 
+
+  // Gestisco il cambio del file di copertina
+
   const handleFileChange = (e) => {
     setCoverFile(e.target.files[0]);
   };
+
+  // Gestisco l'invio del form
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
+      // Preparo i dati del form per l'invio
+
       const formData = new FormData();
       Object.keys(post).forEach((key) => {
         if (key === "readTime") {
@@ -63,6 +74,8 @@ export default function CreatePost() {
       if (coverFile) {
         formData.append("cover", coverFile);
       }
+      // Invio i dati al server
+      
       await createPost(formData);
       setAlert({ show: true, variant: 'success', message: 'Post creato con successo!' });
       setTimeout(() => navigate("/"), 2000);
@@ -85,6 +98,7 @@ export default function CreatePost() {
             </Alert>
           )}
           <Form onSubmit={handleSubmit}>
+            {/* Form fields */}
             <Row>
               <Col md={6}>
                 <Form.Group className="mb-3">

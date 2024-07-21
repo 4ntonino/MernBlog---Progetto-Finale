@@ -38,4 +38,4 @@ export const authMiddleware = async (req, res, next) => {
     // restituisci un errore 401
     res.status(401).send("il token non è  valido");
   }
-};
+}; 

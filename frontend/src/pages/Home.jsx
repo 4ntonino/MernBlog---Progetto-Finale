@@ -62,7 +62,7 @@ export default function Home() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          Esplora i Nostri Post
+         
         </motion.h1>
         <Row xs={1} sm={2} md={3} lg={4} className="g-4">
           <AnimatePresence>

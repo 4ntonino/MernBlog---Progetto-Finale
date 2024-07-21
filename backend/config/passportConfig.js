@@ -1,26 +1,30 @@
-// Importiamo le dipendenze necessarie
+
 import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import Author from "../models/Author.js";
 
-// Configuriamo la strategia di autenticazione Google
+// Configuriamo l'autenticazione con Google
+
 passport.use(
     new GoogleStrategy(
       {
-        // Usiamo le variabili d'ambiente per le credenziali OAuth
+        // Prendiamo le due variabili inserite sul file .env
+
         clientID: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        // L'URL a cui Google reindizzerà dopo l'autenticazione
+
+        // Reindizziamo  dopo l'autenticazione con Google
 
          callbackURL: "/api/auth/google/callback"     //<<<<<<----------   FATTO A LEZIONE
 
                     //   - - - -   SULLA REPO : - - - -
        /*  callbackURL: `${process.env.BACKEND_URL}/api/auth/google/callback`  */
       },
-      // Questa funzione viene chiamata quando l'autenticazione Google ha successo
+      // Se è tutto ok:
+
       async (accessToken, refreshToken, profile, done) => {
         try {
-          // Cerchiamo se esiste già un autore con questo ID Google
+          // Vediamo se esiste già un autore con lo stesso id
           let author = await Author.findOne({ googleId: profile.id });
   
           console.log("LOGIN dell'autore  -  ok", author);
@@ -28,19 +32,18 @@ passport.use(
           // Se l'autore non esiste, ne creiamo uno nuovo
           if (!author) {
               author = new Author({
-              googleId: profile.id, // ID univoco fornito da Google
-              nome: profile.name.givenName, // Nome dell'utente
-              cognome: profile.name.familyName, // Cognome dell'utente
-              email: profile.emails[0].value, // Email principale dell'utente
-              // Nota: la data di nascita non è fornita da Google, quindi la impostiamo a null
+              googleId: profile.id, 
+              nome: profile.name.givenName, 
+              cognome: profile.name.familyName, 
+              email: profile.emails[0].value, 
               dataDiNascita: null, // <--  POSSIAMO ANCHE OMETTERLA
             });
-            // Salviamo il nuovo autore nel database
+            // Salviamo sul database
             await author.save();
           }
   
           // Passiamo l'autore al middleware di Passport
-          // Il primo argomento null indica che non ci sono errori
+   
           done(null, author);
         } catch (error) {
           // Se si verifica un errore, lo passiamo a Passport
@@ -51,15 +54,14 @@ passport.use(
   );
   
 
-  // Serializzazione dell'utente per la sessione
-// Questa funzione determina quali dati dell'utente devono essere memorizzati nella sessione
+  // Indichiamo quali dati dell'utente dobbiamo salvare, in questo caso solo l'id
+
 passport.serializeUser((user, done) => {
-    // Memorizziamo solo l'ID dell'utente nella sessione
+  
     done(null, user.id);
   });
   
-  // Deserializzazione dell'utente dalla sessione
-  // Questa funzione viene usata per recuperare l'intero oggetto utente basandosi sull'ID memorizzato
+ 
   passport.deserializeUser(async (id, done) => {
     try {
       // Cerchiamo l'utente nel database usando l'ID
@@ -72,5 +74,5 @@ passport.serializeUser((user, done) => {
     }
   });
   
-  // Esportiamo la configurazione di Passport
+  
   export default passport;

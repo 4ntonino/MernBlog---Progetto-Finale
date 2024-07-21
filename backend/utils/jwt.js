@@ -1,4 +1,4 @@
-// Importa la libreria jsonwebtoken per gestire i JSON Web Tokens
+
 import jwt from "jsonwebtoken";
 
 // Funzione per generare un token JWT

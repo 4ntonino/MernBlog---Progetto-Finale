@@ -1,16 +1,16 @@
-// Importazione dei moduli necessari
-import express from "express"; // Framework web per Node.js
-import mongoose from "mongoose"; // ODM per MongoDB
-import dotenv from "dotenv"; // Per caricare variabili d'ambiente da file .env
-import cors from "cors"; // Middleware per gestire CORS (Cross-Origin Resource Sharing)
-import listEndpoints from "express-list-endpoints"; // Utility per elencare gli endpoints dell'app
-import authorRoutes from "./routes/authorRoutes.js"; // Rotte per gli autori
-import blogPostRoutes from "./routes/blogPostRoutes.js"; // Rotte per i blog post
+
+import express from "express"; 
+import mongoose from "mongoose"; 
+import dotenv from "dotenv"; 
+import cors from "cors"; 
+import listEndpoints from "express-list-endpoints"; 
+import authorRoutes from "./routes/authorRoutes.js"; 
+import blogPostRoutes from "./routes/blogPostRoutes.js"; 
 import path from 'path';
 import { fileURLToPath } from "url";
-import authRoutes from "./routes/authRoutes.js"; // rotte accesso
-import session from "express-session"; // Importiamo session
-import passport from "./config/passportConfig.js"; // importiamo passport
+import authRoutes from "./routes/authRoutes.js";
+import session from "express-session";
+import passport from "./config/passportConfig.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename)

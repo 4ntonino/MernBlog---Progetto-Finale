@@ -1,4 +1,4 @@
-// 400 - BAD REQUEST - Gestisce errori di richieste mal formate o dati non validi
+
 export const badRequestHandler = (err, req, res, next) => {
   // Verifica se l'errore ha status 400 o se è un errore di validazione
   if (err.status === 400 || err.name === "ValidationError") {

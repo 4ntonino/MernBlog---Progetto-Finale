@@ -1,7 +1,7 @@
-// Importa i componenti necessari da react-router-dom per gestire il routing
+
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
-// Importa i componenti personalizzati dell'applicazione
+
 import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
 import CreatePost from "./pages/CreatePost";
@@ -12,13 +12,12 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 
 
-// Importa il file CSS per gli stili dell'App
+
 import "./App.css";
 
-// Definisce il componente principale App
 function App() {
   return (
-    // Router avvolge l'intera applicazione, abilitando il routing
+  
     <Router>
       <div className="App">
         {/* Navbar è renderizzato in tutte le pagine */}
@@ -49,5 +48,5 @@ function App() {
   );
 }
 
-// Esporta il componente App come default per essere utilizzato in altri file
+
 export default App;

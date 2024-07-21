@@ -1,7 +1,7 @@
 const controlloMail = (req, res, next) => {
   const emailAutorizzata = "autorizzato@mail.it";
 
-  // Ipotizziamo che l'email dell'utente sia passata nell'header della richiesta
+  
   const mailUtente = req.headers["user-email"];
 
   if (mailUtente === emailAutorizzata) {

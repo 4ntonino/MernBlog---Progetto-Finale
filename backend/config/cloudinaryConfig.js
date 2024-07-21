@@ -4,7 +4,8 @@ import { CloudinaryStorage } from "multer-storage-cloudinary";
 import "dotenv/config";
 
 
-// Configurazione di Cloudinary con le credenziali dall'ambiente
+// Configuiriamo Cloudinary
+
 cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
     api_key: process.env.CLOUDINARY_API_KEY,
@@ -14,13 +15,13 @@ cloudinary.config({
   const storage = new CloudinaryStorage({
     cloudinary: cloudinary,
     params: {
-      folder: "blog_covers", // Specifica la cartella di destinazione su Cloudinary
-      allowed_formats: ["jpg", "png", "jpeg", "gif"], // Limita i formati di file accettati
+      folder: "blog_covers", 
+      allowed_formats: ["jpg", "png", "jpeg", "gif"], // Accettiamo solo questi formati
     },
   });
 
 
-// Creazione dell'uploader Multer con lo storage Cloudinary configurato
+// Creiamo l'uploader Multer con lo storage di cloudinary
 const cloudinaryUploader = multer({ 
     storage: storage ,
     limits:{
@@ -28,11 +29,5 @@ const cloudinaryUploader = multer({
     }
 });
 
-// Volendo, si poteva pure inserire un limite alla dimensione dei file caricabili, ad esempio:
-// const cloudinaryUploader = multer({
-//     storage: storage,
-//     limits: { fileSize: 5 * 1024 * 1024 } // Limite di 5MB
-// });
 
-// Esportazione dell'uploader per l'uso in altre parti dell'applicazione
 export default cloudinaryUploader;

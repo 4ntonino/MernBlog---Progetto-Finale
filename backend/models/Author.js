@@ -15,7 +15,7 @@ const authorSchema = new mongoose.Schema({
 });
 
 
-// funzione che confronta la password
+// confronto la password
 
 
 authorSchema.methods.comparePassword = function (candidatePassword) {
@@ -27,7 +27,9 @@ authorSchema.methods.comparePassword = function (candidatePassword) {
 //Middleware per l'hashing delle password prima del salvataggio
 
 authorSchema.pre("save", async function (next) {
-  // Esegui l'hashing solo se la password è stata modificata (o è nuova)
+
+  // Eseguo l'hashing solo se la password è stata modificata o è nuova
+  
   if (!this.isModified("password")) return next();
 
   try {
